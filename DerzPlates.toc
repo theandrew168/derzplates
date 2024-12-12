@@ -1,0 +1,7 @@
+## Interface: 11505
+## Title: DerzPlates
+## Notes: The simplest threat plates addon on the market.
+## Author: theandrew168
+## Version: 0.1
+
+main.lua
