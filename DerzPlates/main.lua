@@ -8,6 +8,8 @@
 -- https://wowpedia.fandom.com/wiki/API_UnitThreatSituation
 -- https://wowpedia.fandom.com/wiki/API_UnitDetailedThreatSituation
 -- https://github.com/Gethe/wow-ui-source/blob/10.2.0/Interface/AddOns/Blizzard_NamePlates/Blizzard_NamePlates.lua
+-- https://wowpedia.fandom.com/wiki/Secure_Execution_and_Tainting
+-- https://github.com/Pondidum/WowInterfakes/blob/master/wow-ui-source/FrameXML/CompactUnitFrame.lua
 
 local statusText = {
 	[0] = "(0) low on threat",
@@ -15,6 +17,23 @@ local statusText = {
 	[2] = "(2) primary target but not on high threat",
 	[3] = "(3) primary target and high threat",
 }
+
+hooksecurefunc("CompactUnitFrame_UpdateHealthColor", function(frame)
+	-- Check if the player is currently tanking the name plate's unit.
+	local status = UnitThreatSituation("player", frame.unit)
+
+	local name, _ = UnitName(frame.unit)
+	if status ~= nil then
+		print(name, "is", statusText[status])
+	end
+
+	if status == 2 or status == 3 then
+		-- If they ARE tanking this unit, set the plate's color to magenta.
+		frame.healthBar:SetStatusBarColor(1, 0, 1, 1)
+	else
+		print("not tanking, leaving default:", name)
+	end
+end)
 
 -- Create the addon "frame" object for handling events.
 local frame = CreateFrame("Frame")
@@ -45,11 +64,6 @@ frame:SetScript("OnEvent", function(self, event, frame)
 		if status == 2 or status == 3 then
 			-- If they ARE tanking this unit, set the plate's color to magenta.
 			unitFrame.healthBar:SetStatusBarColor(1, 0, 1, 1)
-		else
-			-- Otherwise, reset the plate to its default color.
-			-- TODO: This doesn't work :(
-			CompactUnitFrame_UpdateHealthColor(unitFrame)
-			securecall("CompactUnitFrame_UpdateHealthColor", unitFrame)
 		end
 	end
 end)
