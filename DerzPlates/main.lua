@@ -8,7 +8,8 @@
 -- https://wowpedia.fandom.com/wiki/API_UnitReaction
 -- https://wowpedia.fandom.com/wiki/API_UnitThreatSituation
 -- https://wowpedia.fandom.com/wiki/API_UnitDetailedThreatSituation
--- https://github.com/Gethe/wow-ui-source/blob/classic_era/Interface/AddOns/Blizzard_NamePlates/Vanilla/Blizzard_NamePlates.lua-- https://wowpedia.fandom.com/wiki/Secure_Execution_and_Tainting
+-- https://wowpedia.fandom.com/wiki/Secure_Execution_and_Tainting
+-- https://github.com/Gethe/wow-ui-source/blob/classic_era/Interface/AddOns/Blizzard_NamePlates/Vanilla/Blizzard_NamePlates.lua
 
 local statusText = {
 	[0] = "(0) low on threat",
