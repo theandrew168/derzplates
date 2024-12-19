@@ -41,7 +41,7 @@ local function UpdateHealthColorOverride(self)
 		self.healthBar:SetStatusBarColor(1, 0, 1)
 		-- Overwrite saved color so CompactUnitFrame_UpdateHealthColor() can restore the default later.
 		self.healthBar.r, self.healthBar.g, self.healthBar.b = 1, 0, 1
-		-- Signal CompactUnitFrame_UpdateHealthColor() that we set the color ourselves and return immediately.
+		-- Signal CompactUnitFrame_UpdateHealthColor() that we set the color ourselves.
 		return true
 	end
 
@@ -98,7 +98,6 @@ hooksecurefunc("CompactUnitFrame_OnEvent", function(self, event, ...)
 	-- If the event is threat-related and the affected unit frame is "self", call
 	-- CompactUnitFrame_UpdateHealthColor to re-update the frame's health color.
 	if event == "UNIT_THREAT_LIST_UPDATE" and (unit == self.unit or unit == self.displayedUnit) then
-		-- Update color when threat list updates (calls .UpdateHealthColorOverride())
 		CompactUnitFrame_UpdateHealthColor(self)
 	end
 end)
