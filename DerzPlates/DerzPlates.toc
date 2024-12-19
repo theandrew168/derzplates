@@ -2,6 +2,6 @@
 ## Title: DerzPlates
 ## Notes: The simplest threat plates addon on the market.
 ## Author: theandrew168
-## Version: 0.0.1
+## Version: 0.0.2
 
 main.lua
