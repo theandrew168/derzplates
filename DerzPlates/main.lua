@@ -13,15 +13,16 @@
 -- https://github.com/Gethe/wow-ui-source/blob/classic_era/Interface/AddOns/Blizzard_UnitFrame/Classic/CompactUnitFrame.lua
 -- https://www.wowinterface.com/forums/showthread.php?p=344701
 
--- Write a custom implementation of the CompactUnitFrame_UpdateHealthColorOverride function.
--- This gets called immediately when CompactUnitFrame_UpdateHealthColor gets called to alter
--- the nameplate's color. If our override function returns false, then the default coloring
--- code with run. If it returns true, our logic will run instead.
+-- This is a custom implementation of the CompactUnitFrame_UpdateHealthColorOverride
+-- function. Once setup, this gets called whenever CompactUnitFrame_UpdateHealthColor
+-- gets called in order to alter the nameplate's color. If our override function returns
+-- false, then the default coloring code with run. If it returns true, then our color
+-- will be used instead.
 --
 -- Reference:
 -- https://github.com/Gethe/wow-ui-source/blob/e696432cf6c1dcf18036590b64b11c975d8f9fb9/Interface/AddOns/Blizzard_UnitFrame/Classic/CompactUnitFrame.lua#L394-L396
 local function UpdateHealthColorOverride(self)
-	-- Prefer displayedUnit but fallback to unit if necessary.
+	-- Prefer self.displayedUnit but fallback to self.unit if necessary.
 	local unit = self.displayedUnit or self.unit
 
 	-- Don't change the nameplate color for players.
@@ -29,14 +30,18 @@ local function UpdateHealthColorOverride(self)
 		return false
 	end
 
-	-- Don't change the nameplate color to units you cannot attack.
+	-- Don't change the nameplate color for units you cannot attack.
 	if not UnitCanAttack("player", unit) then
 		return false
 	end
 
-	-- Check if the player is currently tanking the name plate's unit.
+	-- UnitThreatSituation returns 3 if the player has the highest threat
+	-- and is the primary target of a given unit.
+	local isTanking = 3
+
+	-- Check if the player is currently tanking the nameplate's unit.
 	local status = UnitThreatSituation("player", unit)
-	if status == 2 or status == 3 then
+	if status == isTanking then
 		-- If they ARE tanking this unit, set the plate's color to magenta.
 		self.healthBar:SetStatusBarColor(1, 0, 1)
 		-- Overwrite saved color so CompactUnitFrame_UpdateHealthColor() can restore the default later.
@@ -45,7 +50,7 @@ local function UpdateHealthColorOverride(self)
 		return true
 	end
 
-	-- If we got here, we want CompactUnitFrame_UpdateHealthColor() to set its default color.
+	-- If we got here, we want CompactUnitFrame_UpdateHealthColor() to apply its default color.
 	return false
 end
 
